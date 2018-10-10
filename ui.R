@@ -38,8 +38,28 @@ body <- dashboardBody(
           )
         ),
         box(
+          title = "Rting Score",
+          width = 6, height = 450,
+          plotlyOutput(
+            outputId = "rating_score"
+          )
+        ),
+        box(
+          title = "Movie Category",
+          width = 11, height = 450,
+          selectizeInput(
+            inputId = "category_select",
+            label = "Select Category",
+            selected = "Action",
+            choices = genre.option
+          ),
+          DT::dataTableOutput(
+            outputId = "category_movie_table"
+          )
+        ),
+        box(
           title = "Recently Reviewed",
-          width = 10, height = 350,
+          width = 11, height = 350,
           DT::dataTableOutput(
             outputId = "table"
           ))
