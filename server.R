@@ -31,6 +31,26 @@ server <- function (input, output){
                            "<br>Your Rating: ", Your.Rating))
   )
   
+  
+###### Best Movies by year
+  year.range <- rating[!duplicated(rating$Year), ][,"Year"]
+  year.range <- data.frame(year.range) %>% 
+    arrange(desc(year.range))
+  
+  best.movies.by.year <- reactive({
+    rating %>% 
+      filter(Year == input$year_select)
+  })
+  
+  output$movies_by_year <- DT::renderDataTable(
+    best.movies.by.year()[,c(4, 2,7,9)] %>% 
+      arrange(desc(Your.Rating), desc(IMDb.Rating)),
+    options = list(
+      lengthMenu = c(5, 10)
+    )
+  )
+  
+  
   rating.category <- reactive({
     rating %>% 
       filter(grepl(as.character(input$category_select), Genres))

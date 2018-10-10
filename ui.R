@@ -38,10 +38,23 @@ body <- dashboardBody(
           )
         ),
         box(
-          title = "Rting Score",
-          width = 6, height = 450,
+          title = "Overall Rting Score Comparison",
+          width = 6, height = 460,
           plotlyOutput(
             outputId = "rating_score"
+          )
+        ),
+        box(
+          title = "Best Movies by Year",
+          width = 6, height = 460,
+          selectInput(
+            inputId = "year_select", 
+            label = "Select Year: ",
+            selected = "2017",
+            choices = year.range
+          ),
+          DT::dataTableOutput(
+            outputId = "movies_by_year"
           )
         ),
         box(
