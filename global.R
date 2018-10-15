@@ -41,5 +41,23 @@ Genres$genre6 <- Genres$genre6 %>%
   str_replace(",", "$")
 Genres <- Genres %>% 
   separate(genre6, sep = "\\$", into = c("genre6", "genre7"))
-Genres.tody <- Genres %>% 
+Genres.tidy <- Genres %>% 
   gather(key = "No", value = "Genre")
+
+## Category Select
+genre.option <- Genres.tidy[!duplicated(Genres.tidy$Genre),]$Genre %>% 
+  str_remove(" ")
+genre.option <- genre.option[-18]
+
+genre.option <- data.frame(genre.option) %>% 
+  arrange(genre.option)
+
+genre.option <- genre.option[!duplicated(genre.option$genre.option),]
+
+## Date Reviewed
+rating$Date.Rated <- as.Date(rating$Date.Rated)
+rating <- rating %>% 
+  mutate(Review_YearMonth = 
+           paste0(year(Date.Rated), "-", str_pad(month(Date.Rated), pad = "0", width = 2)))
+
+

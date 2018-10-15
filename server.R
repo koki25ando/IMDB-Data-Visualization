@@ -50,6 +50,18 @@ server <- function (input, output){
     )
   )
   
+  ## Date Reviewed
+  
+  output$reviewed_month <- renderPlotly(
+    data.frame(table(rating$Review_YearMonth)) %>% 
+      plot_ly(x = ~Var1, y = ~Freq, type = "bar",
+              hoverinfo = "text",
+              text = ~paste0("Year-Month: ", Var1,
+                             "<br>Count: ", Freq)) %>% 
+      layout(yaxis = list(title = "Count"),
+             xaxis = list(title = ""))
+  )
+  
   
   rating.category <- reactive({
     rating %>% 
@@ -73,5 +85,38 @@ server <- function (input, output){
       lengthMenu = c(5, 10)
     )
   )
+  
+  
+# ### Analyze User's Data
+#   
+#   ## Data Input
+#   infile <- reactive({
+#     infile <- input$datafile
+#     
+#     if (is.null(infile)) {
+#       return(NULL)
+#       }
+#     
+#     objectsLoaded <- load(input$datafile) 
+#     return(objectsLoaded)
+#   })
+# 
+#   
+#   ## Showing first rows of data
+#   
+#   myData <- reactive({
+#     objectsLoaded<-infile()
+#     if (is.null(objectsLoaded)) return(NULL)
+#     return(objectsLoaded)
+#   })
+#   
+#   output$overview <- DT::renderDataTable(
+#     myData[,c(4, 2,7, 8,12,3)] %>% 
+#       arrange(desc(Date.Rated)),
+#     options = list(
+#       lengthMenu(c(5,10))
+#     )
+# )
+  
   
 }

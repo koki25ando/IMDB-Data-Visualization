@@ -12,6 +12,7 @@ header <- dashboardHeader(
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Rating Analysis", tabName = "rating_analysis", icon = icon("search")),
+    menuItem("Analyze Your Data", tabName = "your_data", icon = icon("search")),
     menuItem("Information", tabName = "information", icon = icon("info"))
   )
 )
@@ -58,6 +59,13 @@ body <- dashboardBody(
           )
         ),
         box(
+          title = "Date Reviewed",
+          width = 12, height = 450,
+          plotlyOutput(
+            outputId = "reviewed_month"
+          )
+        ),
+        box(
           title = "Movie Category",
           width = 11, height = 450,
           selectizeInput(
@@ -78,6 +86,26 @@ body <- dashboardBody(
           ))
       )
     ),
+    # tabItem(
+    #   tabName = "your_data",
+    #   fluidRow(
+    #     box(
+    #       width = 3, height = 250,
+    #       title = "Input Your IMDb Data",
+    #       fileInput(inputId = 'file1', label = 'Choose CSV File',
+    #                 accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'))
+    #       # ,
+    #       # submitButton(text = "Input Data", icon = icon("refresh"))
+    #     ),
+    #     box(
+    #       width = 8, heiht = 400,
+    #       title = "Overview of Data table",
+    #       DT::dataTableOutput(
+    #         outputId = "overview"
+    #       )
+    #     )
+    #   )
+    # ),
     tabItem(
       tabName = "information"
     )
