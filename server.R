@@ -100,6 +100,36 @@ server <- function (input, output){
   )
   
   
+  ## Movie Poster
+  
+  image <- reactive({
+    selected.movie <- rating %>% 
+      filter(Title == as.character(input$movie_title))
+    selected.poster.url <- read_html(as.character(selected.movie[,5])) %>% 
+      html_nodes("div.poster") %>%
+      html_nodes("img") %>%
+      html_attr("src") %>% 
+      as.character()
+    image_read(selected.poster.url)
+  })
+  
+  # output$test_output <- renderText(
+  #   as.character(img())
+  # )
+  # 
+  # # image <- reactive({
+  # #   image_read(as.character(selected.poster.url))
+  # # })
+  
+  output$img <- renderImage({
+    tmpfile <- image() %>%
+      image_write(tempfile(fileext='jpg'), format = 'jpg')
+    list(src = tmpfile, contentType = "image/jpeg", 
+         width = "100%", height = "100%")
+  })
+  
+  
+
   
   rating.category <- reactive({
     rating %>% 

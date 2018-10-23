@@ -80,6 +80,19 @@ body <- dashboardBody(
           )
         ),
         box(
+          title = "Get Movie's Wallpaper",
+          width = 6, height = 500,
+          box(
+            selectizeInput(
+              label = "Type Movie's Title: ",
+              inputId = "movie_title",
+              choices = rating[!duplicated(rating$Title),]$Title,
+              selected = "Argo"
+              )),
+          submitButton("Search Movie's Poster!", icon = icon("arrow-right")),
+          imageOutput("img", width = "40%", height = "30%")
+        ),
+        box(
           title = "Movie Category",
           width = 11, height = 450,
           selectizeInput(
