@@ -60,4 +60,11 @@ rating <- rating %>%
   mutate(Review_YearMonth = 
            paste0(year(Date.Rated), "-", str_pad(month(Date.Rated), pad = "0", width = 2)))
 
+## Directors' Columns
+director <- data.frame(table(rating$Directors)) %>% 
+  filter(Freq < 15)
+names(director) <- c("Directors", "Num")
+dr.rating <- merge(rating, director, by.x = "Directors", by.y = "Directors")
+dr.rating$Directors <- as.character(dr.rating$Directors) %>% 
+  str_replace("\xf4", "o")
 

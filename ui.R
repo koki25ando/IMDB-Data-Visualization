@@ -39,7 +39,7 @@ body <- dashboardBody(
           )
         ),
         box(
-          title = "Overall Rting Score Comparison",
+          title = "Overall Rating Score Comparison",
           width = 6, height = 460,
           plotlyOutput(
             outputId = "rating_score"
@@ -66,6 +66,20 @@ body <- dashboardBody(
           )
         ),
         box(
+          title = "Movies Reviewed This Month",
+          width = 6, height = 450,
+          plotlyOutput(
+            outputId = "this_month_reviewed"
+          )
+        ),
+        box(
+          title = "Top Directors",
+          width = 6, height = 450,
+          plotlyOutput(
+            outputId = "top_directors"
+          )
+        ),
+        box(
           title = "Movie Category",
           width = 11, height = 450,
           selectizeInput(
@@ -86,26 +100,26 @@ body <- dashboardBody(
           ))
       )
     ),
-    # tabItem(
-    #   tabName = "your_data",
-    #   fluidRow(
-    #     box(
-    #       width = 3, height = 250,
-    #       title = "Input Your IMDb Data",
-    #       fileInput(inputId = 'file1', label = 'Choose CSV File',
-    #                 accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'))
-    #       # ,
-    #       # submitButton(text = "Input Data", icon = icon("refresh"))
-    #     ),
-    #     box(
-    #       width = 8, heiht = 400,
-    #       title = "Overview of Data table",
-    #       DT::dataTableOutput(
-    #         outputId = "overview"
-    #       )
-    #     )
-    #   )
-    # ),
+    tabItem(
+      tabName = "your_data",
+      fluidRow(
+        box(
+          width = 3, height = 250,
+          title = "Input Your IMDb Data",
+          fileInput(inputId = 'file1', label = 'Choose CSV File',
+                    accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'))
+          # ,
+          # submitButton(text = "Input Data", icon = icon("refresh"))
+        ),
+        box(
+          width = 8, heiht = 400,
+          title = "Overview of Data table",
+          DT::dataTableOutput(
+            outputId = "overview"
+          )
+        )
+      )
+    ),
     tabItem(
       tabName = "information"
     )

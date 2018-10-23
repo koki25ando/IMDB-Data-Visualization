@@ -62,6 +62,44 @@ server <- function (input, output){
              xaxis = list(title = ""))
   )
   
+  ## This Month's Review
+  
+  output$this_month_reviewed <- renderPlotly(
+    ggplotly(
+      rating %>%
+        filter(Review_YearMonth == max(rating$Review_YearMonth)) %>% 
+        ggplot(aes(Date.Rated)) +
+        geom_bar(aes(group = Title,
+                     text = paste0("Date Reviewed: ", Date.Rated,
+                                   "<br>Title: ", Title, " (", Year, ")",
+                                   "<br>Your Rating: ", Your.Rating,
+                                   "<br>IMDb Rating: ", IMDb.Rating)),
+                 fill = "#4F6CFF", colour = "grey") +
+        theme_minimal(),
+      tooltip="text"
+    ) %>% 
+      hide_legend()
+  )
+  
+  # Top Directors
+  output$top_directors <- renderPlotly(
+    ggplotly(
+      dr.rating %>% 
+        filter(Num >= 4) %>% 
+        ggplot(aes(x = reorder(Directors, Num), y = Num/Num, group = Title,
+                   text = paste0("Director: ", Directors,
+                                 "<br>Total Movies Reviewed: ", Num,
+                                 "<br>Title: ", Title, " (", Year, ")",
+                                 "<br>Rating Score: ", Your.Rating))) +
+        geom_bar(stat = "identity", fill = "#4F6CFF") +
+        coord_flip() +
+        theme_minimal() +
+        labs(x = "", y = "Count"),
+      tooltip="text"
+    )
+  )
+  
+  
   
   rating.category <- reactive({
     rating %>% 
@@ -89,34 +127,44 @@ server <- function (input, output){
   
 # ### Analyze User's Data
 #   
-#   ## Data Input
-#   infile <- reactive({
-#     infile <- input$datafile
-#     
-#     if (is.null(infile)) {
-#       return(NULL)
-#       }
-#     
-#     objectsLoaded <- load(input$datafile) 
-#     return(objectsLoaded)
-#   })
-# 
-#   
-#   ## Showing first rows of data
-#   
-#   myData <- reactive({
-#     objectsLoaded<-infile()
-#     if (is.null(objectsLoaded)) return(NULL)
-#     return(objectsLoaded)
-#   })
-#   
-#   output$overview <- DT::renderDataTable(
-#     myData[,c(4, 2,7, 8,12,3)] %>% 
-#       arrange(desc(Date.Rated)),
-#     options = list(
-#       lengthMenu(c(5,10))
-#     )
-# )
+  ## Data Input
+  infile <- reactive({
+    infile <- input$datafile
+
+    if (is.null(infile)) {
+      return(NULL)
+      }
+
+    objectsLoaded <- load(input$datafile)
+    return(objectsLoaded)
+  })
+
+
+  ## Showing first rows of data
+
+  # myData <- reactive({
+  #   objectsLoaded<-infile()
+  #   if (is.null(objectsLoaded)) return(NULL)
+  #   return(objectsLoaded)
+  # })
+
+  # tryCatch(
+  #   {
+  #     objectsLoaded <- read.csv(input$file1$datapath)
+  #   },
+  #   error = function(e) {
+  #     # return a safeError if a parsing error occurs
+  #     stop(safeError(e))
+  #   }
+  # )
+  
+  output$overview <- DT::renderDataTable(
+    myData[,c(4, 2,7, 8,12,3)] %>%
+      arrange(desc(Date.Rated)),
+    options = list(
+      lengthMenu(c(5,10))
+    )
+)
   
   
 }
