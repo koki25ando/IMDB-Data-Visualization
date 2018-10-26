@@ -2,17 +2,21 @@
 
 server <- function (input, output){
   
+  ## Release Year Histogram
   output$year_hist <- renderPlotly(
     ggplotly(
       rating %>% 
+        group_by(Year) %>% 
+        mutate(Year_Count = sum(Year)/Year) %>% 
         ggplot(aes(Year)) +
         geom_histogram(aes(text = paste0("Year: ", Year,
-                                         "<br>Count: ")),
+                                         "<br>Count: ", Year_Count)),
                        binwidth = 1, fill = "#4F6CFF") +
         theme_minimal(),
       tooltip="text")
   )
   
+  ## Movie Category Pie Chart
   output$movie_category <- renderPlotly(
     plot_ly(as.data.frame(table(Genres.tidy$Genre))[-1,], 
             labels = ~Var1, values = ~Freq, type = 'pie', 
@@ -22,24 +26,24 @@ server <- function (input, output){
              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   )
   
+  
+  ## Rating Score Scatter Plot
   output$rating_score <- renderPlotly(
     plot_ly(data = rating, 
             x = ~IMDb.Rating, y = ~Your.Rating,
             hoverinfo = "text",
             text = ~paste0("Title: ", Title,
+                           "<br>Director: ", Directors,
                            "<br>IMDb Rating: ", IMDb.Rating,
                            "<br>Your Rating: ", Your.Rating))
   )
   
   
 ###### Best Movies by year
-  year.range <- rating[!duplicated(rating$Year), ][,"Year"]
-  year.range <- data.frame(year.range) %>% 
-    arrange(desc(year.range))
   
   best.movies.by.year <- reactive({
     rating %>% 
-      filter(Year == input$year_select)
+      filter(Year == as.numeric(input$year_select))
   })
   
   output$movies_by_year <- DT::renderDataTable(
@@ -113,13 +117,23 @@ server <- function (input, output){
     image_read(selected.poster.url)
   })
   
-  # output$test_output <- renderText(
-  #   as.character(img())
-  # )
-  # 
-  # # image <- reactive({
-  # #   image_read(as.character(selected.poster.url))
-  # # })
+  ## Rating Score Histogramr
+  
+  output$score_hist <- renderPlotly(
+    ggplotly(
+      rating %>% 
+        group_by(Your.Rating) %>% 
+        mutate(Rating.Count = sum(Your.Rating)/Your.Rating) %>% 
+        ggplot(aes(Your.Rating)) +
+        geom_histogram(aes(text = paste0(
+          "Rating Score: ", Your.Rating,
+          "<br>Movie Count: ", Rating.Count
+        )),
+        binwidth = 1, fill = "#4F6CFF") +
+        theme_minimal(),
+      tooltip="text"
+    )
+  )
   
   output$img <- renderImage({
     tmpfile <- image() %>%
@@ -128,8 +142,19 @@ server <- function (input, output){
          width = "100%", height = "100%")
   })
   
+  ## Poster Download
   
-
+  # output$poster_download <- downloadHandler(
+  #   filename = function() {
+  #     paste0(as.character(input$movie_title), "_poster.png")
+  #   },
+  #   content = function(file) {
+  #     png(file)
+  #     print(img())
+  #     dev.off()
+  #   }
+  # )
+  
   
   rating.category <- reactive({
     rating %>% 

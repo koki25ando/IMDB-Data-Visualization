@@ -40,20 +40,21 @@ body <- dashboardBody(
         ),
         box(
           title = "Overall Rating Score Comparison",
-          width = 6, height = 460,
+          width = 6, height = 500,
           plotlyOutput(
             outputId = "rating_score"
           )
         ),
         box(
           title = "Best Movies by Year",
-          width = 6, height = 460,
-          selectInput(
+          width = 6, height = 500,
+          box(selectInput(
             inputId = "year_select", 
             label = "Select Year: ",
             selected = "2017",
             choices = year.range
-          ),
+          )),
+          submitButton("Search Movie's Poster!", icon = icon("arrow-right")),
           DT::dataTableOutput(
             outputId = "movies_by_year"
           )
@@ -91,6 +92,18 @@ body <- dashboardBody(
               )),
           submitButton("Search Movie's Poster!", icon = icon("arrow-right")),
           imageOutput("img", width = "40%", height = "30%")
+          # ,
+          # downloadButton(
+          #   outputId = "poster_download",
+          #   label = "Download Poster: "
+          # )
+        ),
+        box(
+          title = "Distribution of Rating Score",
+          width = 6, height = 450,
+          plotlyOutput(
+            outputId = "score_hist"
+          )
         ),
         box(
           title = "Movie Category",

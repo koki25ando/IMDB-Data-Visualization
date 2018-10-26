@@ -15,6 +15,8 @@ rating <- read.csv("https://s3-ap-southeast-2.amazonaws.com/koki25ando/IMDb/rati
 ## Data Cleaning
 rating$Title <- rating$Title %>% 
   str_replace_all("\xf4", "o")
+rating$Directors <- as.character(rating$Directors) %>% 
+  str_replace("\xf4", "o")
 
 
 ## Category Data setting
@@ -61,6 +63,11 @@ rating$Date.Rated <- as.Date(rating$Date.Rated)
 rating <- rating %>% 
   mutate(Review_YearMonth = 
            paste0(year(Date.Rated), "-", str_pad(month(Date.Rated), pad = "0", width = 2)))
+
+## Best Movies by year
+year.range <- rating[!duplicated(rating$Year), ][,"Year"]
+year.range <- data.frame(year.range) %>% 
+  arrange(desc(year.range))
 
 ## Directors' Columns
 director <- data.frame(table(rating$Directors)) %>% 
