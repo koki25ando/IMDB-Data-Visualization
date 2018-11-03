@@ -72,18 +72,18 @@ server <- function (input, output){
     ggplotly(
       rating %>%
         filter(Review_YearMonth == max(rating$Review_YearMonth)) %>% 
-        ggplot(aes(Date.Rated)) +
-        geom_bar(aes(group = Title,
-                     text = paste0("Date Reviewed: ", Date.Rated,
+        ggplot(aes(x = Date.Rated, y = Run_Mins, group = Title, 
+                   fill = Your.Rating)) +
+        geom_bar(aes(text = paste0("Date Reviewed: ", Date.Rated,
                                    "<br>Title: ", Title, " (", Year, ")",
                                    "<br>Your Rating: ", Your.Rating,
-                                   "<br>IMDb Rating: ", IMDb.Rating)),
-                 fill = "#4F6CFF", colour = "grey") +
-        theme_minimal(),
+                                   "<br>Run Minutes: ", Run_Mins, " Minutes")),
+                 stat = "identity", colour = "grey") +
+        theme_minimal() +
+        labs(fill = "Rating", y = "Minutes"),
       tooltip="text"
-    ) %>% 
-      hide_legend()
-  )
+    )
+    )
   
   # Top Directors
   output$top_directors <- renderPlotly(
@@ -91,14 +91,17 @@ server <- function (input, output){
       dr.rating %>% 
         filter(Num >= 4) %>% 
         ggplot(aes(x = reorder(Directors, Num), y = Num/Num, group = Title,
+                   fill = Your.Rating,
                    text = paste0("Director: ", Directors,
                                  "<br>Total Movies Reviewed: ", Num,
                                  "<br>Title: ", Title, " (", Year, ")",
                                  "<br>Rating Score: ", Your.Rating))) +
-        geom_bar(stat = "identity", fill = "#4F6CFF") +
+        geom_bar(stat = "identity"
+                 # , fill = "#4F6CFF"
+                 ) +
         coord_flip() +
         theme_minimal() +
-        labs(x = "", y = "Count"),
+        labs(fill = "Rating", x = "", y = "Count"),
       tooltip="text"
     )
   )

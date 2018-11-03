@@ -7,7 +7,7 @@ library(DT)
 library(plotly)
 library(lubridate)
 library(rvest)
-
+library(magick)
 
 ## Data Loading
 rating <- read.csv("https://s3-ap-southeast-2.amazonaws.com/koki25ando/IMDb/ratings.csv")
@@ -68,6 +68,9 @@ rating <- rating %>%
 year.range <- rating[!duplicated(rating$Year), ][,"Year"]
 year.range <- data.frame(year.range) %>% 
   arrange(desc(year.range))
+
+## Reviews of This Month
+names(rating)[8] <- "Run_Mins"
 
 ## Directors' Columns
 director <- data.frame(table(rating$Directors)) %>% 
