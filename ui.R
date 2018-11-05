@@ -92,11 +92,6 @@ body <- dashboardBody(
               )),
           submitButton("Search Movie's Poster!", icon = icon("arrow-right")),
           imageOutput("img", width = "40%", height = "30%")
-          # ,
-          # downloadButton(
-          #   outputId = "poster_download",
-          #   label = "Download Poster: "
-          # )
         ),
         box(
           title = "Distribution of Rating Score",
@@ -132,17 +127,20 @@ body <- dashboardBody(
         box(
           width = 3, height = 250,
           title = "Input Your IMDb Data",
-          fileInput(inputId = 'file1', label = 'Choose CSV File',
-                    accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'))
-          # ,
-          # submitButton(text = "Input Data", icon = icon("refresh"))
+          fileInput("file1", "Choose CSV File",
+                    accept = c(
+                      "text/csv",
+                      "text/comma-separated-values,text/plain",
+                      ".csv")
+          ),
+          tags$hr(),
+          checkboxInput("header", "Header", TRUE),
+          submitButton("Input Data!", icon = icon("arrow-right"))
         ),
         box(
           width = 8, heiht = 400,
           title = "Overview of Data table",
-          DT::dataTableOutput(
-            outputId = "overview"
-          )
+          DT::dataTableOutput("contents")
         )
       )
     ),

@@ -9,6 +9,10 @@ library(lubridate)
 library(rvest)
 library(magick)
 
+## 
+Sys.setlocale('LC_ALL','C') 
+
+
 ## Data Loading
 rating <- read.csv("https://s3-ap-southeast-2.amazonaws.com/koki25ando/IMDb/ratings.csv")
 

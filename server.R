@@ -186,43 +186,20 @@ server <- function (input, output){
 # ### Analyze User's Data
 #   
   ## Data Input
-  infile <- reactive({
-    infile <- input$datafile
-
-    if (is.null(infile)) {
-      return(NULL)
-      }
-
-    objectsLoaded <- load(input$datafile)
-    return(objectsLoaded)
+  external_data <- reactive({
+  require(input$file1)
+  if (is.null(input$file1))
+    return(NULL)
+  
+  # data.table::fread(input$file1$datapath, header = input$header)
+  read.csv(input$file1$datapath, header = input$header)
   })
-
-
-  ## Showing first rows of data
-
-  # myData <- reactive({
-  #   objectsLoaded<-infile()
-  #   if (is.null(objectsLoaded)) return(NULL)
-  #   return(objectsLoaded)
-  # })
-
-  # tryCatch(
-  #   {
-  #     objectsLoaded <- read.csv(input$file1$datapath)
-  #   },
-  #   error = function(e) {
-  #     # return a safeError if a parsing error occurs
-  #     stop(safeError(e))
-  #   }
-  # )
   
-  output$overview <- DT::renderDataTable(
-    myData[,c(4, 2,7, 8,12,3)] %>%
-      arrange(desc(Date.Rated)),
+  output$contents <- DT::renderDataTable(
+    external_data(),
     options = list(
-      lengthMenu(c(5,10))
+      lengthMenu = c(2, 5, 10)
     )
-)
-  
+  )
   
 }
