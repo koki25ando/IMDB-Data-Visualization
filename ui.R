@@ -54,7 +54,7 @@ body <- dashboardBody(
             selected = "2017",
             choices = year.range
           )),
-          submitButton("Search Movie's Poster!", icon = icon("arrow-right")),
+          submitButton("Search Movies!", icon = icon("arrow-right")),
           DT::dataTableOutput(
             outputId = "movies_by_year"
           )
@@ -102,13 +102,14 @@ body <- dashboardBody(
         ),
         box(
           title = "Movie Category",
-          width = 11, height = 450,
+          width = 11, height = 500,
           selectizeInput(
             inputId = "category_select",
             label = "Select Category",
             selected = "Action",
             choices = genre.option
           ),
+          submitButton("Search Movies", icon = icon("arrow-right")),
           DT::dataTableOutput(
             outputId = "category_movie_table"
           )

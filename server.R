@@ -15,7 +15,7 @@ server <- function (input, output){
         theme_minimal(),
       tooltip="text")
   )
-  
+
   ## Movie Category Pie Chart
   output$movie_category <- renderPlotly(
     plot_ly(as.data.frame(table(Genres.tidy$Genre))[-1,], 
